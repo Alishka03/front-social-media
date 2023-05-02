@@ -1,6 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from "../../model/user";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../services/auth.service";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-header',
@@ -17,18 +21,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
   resultSize: number = 5;
   hasMoreNotifications: boolean = false;
   fetchingResult: boolean = false;
-
+  defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
   private subscriptions: Subscription[] = [];
   notificationMenu: any;
 
   constructor(
-    // private authService: AuthService,
+    private authService: AuthService,
     // private notificationService: NotificationService,
-    // private matDialog: MatDialog,
-    // private matSnackbar: MatSnackBar
+    private matDialog: MatDialog,
+    private matSnackbar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+    if (this.authService.isUserLoggedIn()) {
+      this.isUserLoggedIn = true;
+      this.authUser = this.authService.getAuthUserFromCache();
+    } else {
+      this.isUserLoggedIn = false;
+    }
+    this.authService.logoutSubject.subscribe(loggedOut => {
+      if (loggedOut) {
+        this.isUserLoggedIn = false;
+      }
+    });
+    this.authService.loginSubject.subscribe(loggedInUser => {
+      if (loggedInUser) {
+        this.authUser = loggedInUser;
+        this.isUserLoggedIn = true;
+      }
+    });
   }
 
   ngOnDestroy(): void {

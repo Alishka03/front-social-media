@@ -5,6 +5,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {RepeatPasswordMatcher} from "../../common/repeat-password-matcher";
 import {UserSignup} from "../../model/user-signup";
 import {AuthService} from "../../services/auth.service";
+import {AppConstants} from "../../common/appconstants";
+import {SnackbarComponent} from "../../snackbar/snackbar.component";
 
 @Component({
   selector: 'app-signup',
@@ -60,10 +62,24 @@ export class SignupComponent implements OnInit{
       userSignup.surname = this.lastName?.value;
       userSignup.username = this.email?.value;
       userSignup.password = this.password?.value;
+      localStorage.setItem(AppConstants.messageTypeLabel, AppConstants.successLabel);
+      localStorage.setItem(AppConstants.messageHeaderLabel, AppConstants.signupSuccessHeader);
+      localStorage.setItem(AppConstants.messageDetailLabel, AppConstants.signupSuccessDetail);
+      localStorage.setItem(AppConstants.toLoginLabel, AppConstants.trueLabel);
       this.authService.signup(userSignup).subscribe((res)=>{
+        localStorage.setItem(AppConstants.messageTypeLabel, AppConstants.successLabel);
+        localStorage.setItem(AppConstants.messageHeaderLabel, AppConstants.signupSuccessHeader);
+        localStorage.setItem(AppConstants.messageDetailLabel, AppConstants.signupSuccessDetail);
+        localStorage.setItem(AppConstants.toLoginLabel, AppConstants.trueLabel);
         console.log(res)
+        this.submittingForm = false;
       },error => {
         console.log(error)
+        this.matSnackbar.openFromComponent(SnackbarComponent, {
+          data: AppConstants.snackbarErrorContent,
+          panelClass: ['bg-danger'],
+          duration: 5000
+        });
       })
     }
   }
