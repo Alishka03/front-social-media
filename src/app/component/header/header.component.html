@@ -6,7 +6,7 @@
   <a href="/profile" class="rounded-pill ps-2 pt-1 pe-3 pb-1 text-white text-decoration-none" *ngIf="isUserLoggedIn">
 		<span class="rounded-circle d-inline-block align-middle centered-bg-image"
           style="width: 30px; height: 30px; background-color: white;"
-          [style.background-image]="'url(' + defaultProfilePhotoUrl + ')'"></span>
+          [style.background-image]="'url(' + profileImage + ')'"></span>
     <span class="mat-body-strong d-inline-block align-middle ps-2">{{ authUser?.name }}</span>
   </a>
 
@@ -17,12 +17,9 @@
     <button mat-icon-button (click)="openSearchDialog()">
       <mat-icon>search</mat-icon>
     </button>
-
-    <button mat-icon-button [matMenuTriggerFor]="notificationMenu" (click)="handleUnseenNotifications()">
-      <mat-icon>notifications</mat-icon>
-      <span class="position-absolute translate-middle p-2 bg-danger rounded-circle" style="top: 10px; right: -5px;" *ngIf="hasUnseenNotification"></span>
+    <button mat-icon-button (click)="openUsersDialog()">
+      <mat-icon>supervisor_account</mat-icon>
     </button>
-
     <button mat-icon-button [matMenuTriggerFor]="mainMenu">
       <mat-icon>more_vert</mat-icon>
     </button>

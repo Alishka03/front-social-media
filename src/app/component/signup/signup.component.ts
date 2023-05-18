@@ -73,6 +73,12 @@ export class SignupComponent implements OnInit{
         localStorage.setItem(AppConstants.toLoginLabel, AppConstants.trueLabel);
         console.log(res)
         this.submittingForm = false;
+        this.matSnackbar.openFromComponent(SnackbarComponent, {
+          data: "Registered successfully!",
+          panelClass: ['bg-success'],
+          duration: 5000
+        });
+        this.router.navigateByUrl('/login')
       },error => {
         console.log(error)
         this.matSnackbar.openFromComponent(SnackbarComponent, {

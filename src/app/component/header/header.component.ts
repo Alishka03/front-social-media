@@ -5,6 +5,8 @@ import {AuthService} from "../../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {environment} from "../../../environments/environment";
+import {PostDialogComponent} from "../post-dialog/post-dialog.component";
+import {UsersComponent} from "../users/users.component";
 
 @Component({
   selector: 'app-header',
@@ -24,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
   private subscriptions: Subscription[] = [];
   notificationMenu: any;
-
+  profileImage = environment.defaultProfilePhotoUrl;
   constructor(
     private authService: AuthService,
     // private notificationService: NotificationService,
@@ -36,6 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.authService.isUserLoggedIn()) {
       this.isUserLoggedIn = true;
       this.authUser = this.authService.getAuthUserFromCache();
+      if(this.authUser.profilePhoto!=null) this.profileImage = environment.photoUrl + this.authUser.profilePhoto;
     } else {
       this.isUserLoggedIn = false;
     }
@@ -57,12 +60,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openPostDialog(): void {
-    // this.matDialog.open(PostDialogComponent, {
-    //   data: null,
-    //   autoFocus: false,
-    //   minWidth: '500px',
-    //   maxWidth: '700px'
-    // });
+    this.matDialog.open(PostDialogComponent, {
+      data: null,
+      autoFocus: false,
+      minWidth: '500px',
+      maxWidth: '700px'
+    });
   }
 
   openSearchDialog(): void {
@@ -122,5 +125,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //     })
     //   );
     // }
+  }
+
+  openUsersDialog() {
+    this.matDialog.open(UsersComponent,{
+      autoFocus: true,
+      width: '500px'
+    });
   }
 }
